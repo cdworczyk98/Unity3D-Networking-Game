@@ -32,11 +32,6 @@ namespace Photon.Pun.UtilityScripts
         /// <summary>Used as PhotonNetwork.GameVersion.</summary>
         public byte Version = 1;
 
-		/// <summary>Max number of players allowed in room. Once full, a new room will be created by the next connection attemping to join.</summary>
-		[Tooltip("The max number of players allowed in room. Once full, a new room will be created by the next connection attemping to join.")]
-		public byte MaxPlayers = 4;
-
-        public int playerTTL = -1;
 
         public void Start()
         {
@@ -49,11 +44,8 @@ namespace Photon.Pun.UtilityScripts
         public void ConnectNow()
         {
             Debug.Log("ConnectAndJoinRandom.ConnectNow() will now call: PhotonNetwork.ConnectUsingSettings().");
-
-            
             PhotonNetwork.ConnectUsingSettings();
             PhotonNetwork.GameVersion = this.Version + "." + SceneManagerHelper.ActiveSceneBuildIndex;
-           
         }
 
 
@@ -77,12 +69,7 @@ namespace Photon.Pun.UtilityScripts
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
             Debug.Log("OnJoinRandomFailed() was called by PUN. No random room available in region [" + PhotonNetwork.CloudRegion + "], so we create one. Calling: PhotonNetwork.CreateRoom(null, new RoomOptions() {maxPlayers = 4}, null);");
-
-            RoomOptions roomOptions = new RoomOptions() { MaxPlayers = this.MaxPlayers };
-            if (playerTTL >= 0)
-                roomOptions.PlayerTtl = playerTTL;
-
-            PhotonNetwork.CreateRoom(null, roomOptions, null);
+            PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = 4 }, null);
         }
 
         // the following methods are implemented to give you some context. re-implement them as needed.
